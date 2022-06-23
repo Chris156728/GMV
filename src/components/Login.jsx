@@ -7,7 +7,9 @@ import ExobitsABI from '../contract/ReExoBits.json';
 export default function Login(props) {
 
 	const contractAddress = "0x7a7b4757543987dD07936D473Ead236ebcdc4999";
-
+	const dappUrl = "odd-shape-4619.on.fleek.co"; 
+			// TODO enter your dapp URL. For example: https://uniswap.exchange. (don't enter the "https://")
+	const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
 	const DoConnect = async () => {
 
 		console.log('Connecting....');
@@ -32,8 +34,13 @@ export default function Login(props) {
 	};
 
 	// If not connected, display the connect button.
-	if(!props.connected) return <button className="login" onClick={DoConnect}>Connect Wallet</button>;
-
+	if(!props.connected) {
+		if(window.ethereum){
+			return <button className="login" onClick={DoConnect}>Connect Wallet</button>;
+		} else {
+			return <a href={metamaskAppDeepLink}><button className="login">Connect Wallet</button></a>;
+		}			
+	}
 	// Display the wallet address. Truncate it to save space.
 	return <>[{props.address.slice(0,6)}]</>;
 }
